@@ -34,7 +34,16 @@ ModeFlags& ModeFlags::operator=(const ModeFlags& rhs)
 {
 	if (this != &rhs)
 	{
-		ModeFlags(rhs);
+		i.first = rhs.i.first;
+		t.first = rhs.t.first;
+		k.first = rhs.k.first;
+		o.first = rhs.o.first;
+		l.first = rhs.l.first;
+		i.second = rhs.i.second;
+		t.second = rhs.t.second;
+		k.second = rhs.k.second;
+		o.second = rhs.o.second;
+		l.second = rhs.l.second;
 	}
 	return (*this);
 }

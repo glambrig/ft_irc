@@ -7,12 +7,14 @@ Channel::Channel()
 
 Channel::Channel(const Channel& copy)
 {
-
+	*this = copy;
 }
 
 Channel& Channel::operator=(const Channel& rhs)
 {
-
+	if (&rhs != this)
+		*this = rhs;
+	return (*this);
 }
 
 Channel::~Channel()

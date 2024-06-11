@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include "ModeFlags.hpp"
 
 class Channel
 {

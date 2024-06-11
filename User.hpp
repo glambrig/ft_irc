@@ -4,10 +4,6 @@
 #include <string>
 #include <vector>
 
-#include "ModeFlags.hpp"
-#include "Channel.hpp"
-#include "Server.hpp"
-
 struct	UserNames
 {
 	std::string	nickname;	
