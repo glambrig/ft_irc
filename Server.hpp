@@ -2,9 +2,14 @@
 
 #include "Channel.hpp"
 #include "User.hpp"
+#include <cstdlib>
 #include <ctype.h>
 #include <unistd.h>
-#include <cstdlib>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <poll.h>
+#include <stdio.h>
 
 class Server
 {
@@ -14,7 +19,6 @@ private:
 	size_t				_port;
 	std::string	sPort;
 	std::string	sPassword;
-	bool				_errToggle;	//If an error occurs in parsing, this becomes true and program doesn't run
 public:
 	Server();
 	Server(const Server& copy);
@@ -23,4 +27,7 @@ public:
 	~Server();
 
 	void	parseArgs(int ac, char **av);
+	void	run();
+
+	bool	errToggle;	//If an error occurs in parsing, this becomes true and program doesn't run
 };
