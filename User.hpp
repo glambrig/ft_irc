@@ -8,18 +8,30 @@
 #include "Channel.hpp"
 #include "Server.hpp"
 
-struct	UserNames
+class	User
 {
-	std::string	nickname;	
-	std::string	username;	
-	std::string	hostname;	
-	std::string	realname;	
-};
+	private :
+		std::string	username;
+		std::string password;
+		int 		socket;
+		int 		status;
+		int			currentChannel;
 
-struct	User
-{
-	UserNames					userNames;
-	std::vector<std::string>	channels;	//List of channels the user is in
-	bool						isOperator;
-};
+	public:
+		User();
+		User(const User& copy);
+		User& operator=(const User& rhs);
+		~User();
 
+		std::string	getUsername() const;
+		std::string	getPassword() const;
+		int			getSocket() const;
+		int			getStatus() const;
+		int			getCurrentChannel() const;
+
+		void		setUsername(std::string username);
+		void		setPassword(std::string password);
+		void		setSocket(int socket);
+		void		setStatus(int status);
+		void		setCurrentChannel(int currentChannel);
+};
