@@ -69,8 +69,8 @@ void	Server::run()
 		if (listenfd < 0)
 			throw ("Server::run::Error creating socket.");
 		servAddr.sin_family = AF_INET;	//Expecting an internet address (ip)
-		servAddr.sin_port = htonl(_port);	//Incoming connections on port _port (specified by user)
-		servAddr.sin_addr.s_addr = htons(INADDR_ANY);	//Accept connections from any IP address
+		servAddr.sin_port = htons(_port);	//Incoming connections on port _port (specified by user)
+		servAddr.sin_addr.s_addr = htonl(INADDR_ANY);	//Accept connections from any IP address
 		if (bind(listenfd, (struct sockaddr *)&servAddr, sizeof(servAddr)) < 0)
 			throw ("Server::run::Error binding address to socket.");
 		if (listen(listenfd, MAX_CLIENTS) < 0)
@@ -79,7 +79,7 @@ void	Server::run()
 		{
 			// poll()
 			std::cout << "Waiting for connection on port " << _port << std::endl;
-			clientfd[i] = accept(listenfd, static_cast<struct sockaddr *>(NULL), NULL);
+			clientfd[i] = accept(listenfd, (struct sockaddr *)NULL, NULL);
 			if (clientfd[i] < 0)
 				throw ("Server::run::Error accepting connection.");
 			std::cout << "GOT CONNECTION!!" << std::endl;
