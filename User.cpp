@@ -92,4 +92,3 @@ void		User::setCurrentChannel(int currentChannel)
 {
 	this->currentChannel = currentChannel;
 }
-

@@ -57,7 +57,7 @@ std::string	Channel::addUser(std::string name)
 
 std::string	Channel::removeUser(std::string name)
 {
-	auto it = std::find(_users.begin(), _users.end(), name);
+	std::vector<std::string>::iterator it = std::find(_users.begin(), _users.end(), name);
 	if (it == _users.end())
 		return ("User not found");
 	_users.erase(it);
@@ -122,11 +122,11 @@ int		Channel::isOperator(std::string name) const
 // Pour std::vector<std::string>
 std::ostream& operator<<(std::ostream& out, const std::vector<std::string>& vec)
 {
-	for (const auto& str : vec)
+	for (std::vector<std::string>::const_iterator it = vec.begin(); it != vec.end(); ++it)
 	{
-		out << str << ' ';
+		out << *it << ' ';
 	}
-		return out;
+	return out;
 }
 
 // Pour Channel
