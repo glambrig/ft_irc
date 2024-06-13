@@ -33,6 +33,11 @@ std::string	User::getUsername() const
 	return (this->username);
 }
 
+std::string	User::getNickname() const
+{
+	return (this->nickname);
+}
+
 std::string	User::getPassword() const
 {
 	return (this->password);
@@ -59,6 +64,15 @@ void		User::setUsername(std::string username)
 	this->username = username;
 }
 
+void		User::setNickname(std::string nickname)
+{
+	if (nickname.size() > 9)
+	{
+		std::cerr << "Nickname should be 9 characters max" << std::endl;
+	}
+	this->nickname = nickname.substr(0, 9);
+}
+
 void		User::setPassword(std::string password)
 {
 	this->password = password;
@@ -78,3 +92,4 @@ void		User::setCurrentChannel(int currentChannel)
 {
 	this->currentChannel = currentChannel;
 }
+

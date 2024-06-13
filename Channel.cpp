@@ -1,23 +1,32 @@
 #include "Channel.hpp"
+#include <algorithm>
 
 Channel::Channel()
 {
-
 }
 
 Channel::Channel(const Channel& copy)
 {
-
+	*this = copy;
 }
 
 Channel& Channel::operator=(const Channel& rhs)
 {
-
+	if (this != &rhs)
+	{
+		this->_name = rhs._name;
+		this->_key = rhs._key;
+		this->_topic = rhs._topic;
+		this->_users = rhs._users;
+	}
+	return (*this);
 }
 
 Channel::~Channel()
 {
 }
+
+//---------------------- setters --------------------------//
 
 void	Channel::setName(std::string name)
 {
@@ -26,40 +35,103 @@ void	Channel::setName(std::string name)
 
 void	Channel::setKey(std::string key)
 {
-	_name = key;
+	_key = key;
 }
 
 void	Channel::setTopic(std::string topic)
 {
-	_name = topic;
+	_topic = topic;
 }
 
-void	Channel::changeFlag(const char c, bool toggle)
+
+//-------------- add/remove user -----------------//
+
+std::string	Channel::addUser(std::string name)
 {
-	if (c != 'i' && c != 't' && c != 'k' && c != 'o' && c != 'l')
+	_users.push_back(name);
+	return (name);
+}
+
+std::string	Channel::removeUser(std::string name)
+{
+	auto it = std::find(_users.begin(), _users.end(), name);
+	if (it == _users.end())
+		return ("User not found");
+	_users.erase(it);
+	return (name);
+}
+
+//-------------- getters -----------------//
+
+std::vector<std::string>	Channel::getUsers() const
+{
+	return (_users);
+}
+
+std::vector<std::string>	Channel::getOperators() const
+{
+	return (_operators);
+}
+
+std::string	Channel::getName() const
+{
+	return (_name);
+}
+
+std::string	Channel::getTopic() const
+{
+	return (_topic);
+}
+
+std::string	Channel::getKey() const
+{
+	return (_key);
+}
+
+//-------------- functions -----------------//
+
+int		Channel::isUserInChannel(std::string name) const
+{
+	int index = 0;
+	for (std::vector<std::string>::const_iterator it = _users.begin(); it != _users.end(); it++)
 	{
-		std::cerr << "Channel::changeFlag: Invalid flag provided" << std::endl;
-		return ;
+		if (*it == name)
+			return (index);
+		index++;
 	}
-	switch (c)
+	return (-1);
+}
+
+int		Channel::isOperator(std::string name) const
+{
+	int index = 0;
+	for (std::vector<std::string>::const_iterator it = _operators.begin(); it != _operators.end(); it++)
 	{
-		case 'i':
-			_modeFlags.i.second = toggle;
-			break ;
-		case 't':
-			_modeFlags.t.second = toggle;
-			break ;
-		case 'k':
-			_modeFlags.k.second = toggle;
-			break ;
-		case 'o':
-			_modeFlags.o.second = toggle;
-			break ;
-		case 'l':
-			_modeFlags.l.second = toggle;
-			break ;
-		default :
-			throw ("Channel::changeFlag: Unable to change flag");
-			break ;
+		if (*it == name)
+			return (index);
+		index++;
 	}
+	return (-1);
+}
+
+//-------------- operator surcharge -----------------//
+
+// Pour std::vector<std::string>
+std::ostream& operator<<(std::ostream& out, const std::vector<std::string>& vec)
+{
+	for (const auto& str : vec)
+	{
+		out << str << ' ';
+	}
+		return out;
+}
+
+// Pour Channel
+std::ostream& operator<<(std::ostream& out, const Channel& channel)
+{
+	out << channel.getName() << std::endl;
+	out << channel.getKey() << std::endl;
+	out << channel.getTopic() << std::endl;
+	out << channel.getUsers() << std::endl;
+	return out;
 }
