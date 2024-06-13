@@ -9,6 +9,7 @@ struct ModeFlags
 	std::pair<char, bool>	k;
 	std::pair<char, bool>	o;
 	std::pair<char, bool>	l;
+
 	ModeFlags();
 	ModeFlags(const ModeFlags& copy);
 	ModeFlags& operator=(const ModeFlags& rhs);
