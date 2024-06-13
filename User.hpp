@@ -9,7 +9,7 @@
 
 class	User
 {
-	private :
+	private:
 		std::string	username;
 		std::string	nickname;
 		std::string password;
