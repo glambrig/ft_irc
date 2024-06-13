@@ -4,7 +4,10 @@
 #include <string>
 #include <vector>
 
-struct	UserNames
+#include "Channel.hpp"
+#include "Server.hpp"
+
+class	User
 {
 	private :
 		std::string	username;
