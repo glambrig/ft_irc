@@ -2,12 +2,15 @@
 
 #include "Channel.hpp"
 #include "User.hpp"
-#include <cstdlib>
+#include <vector>
+#include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/select.h>
 #include <netinet/in.h>
+#include <netdb.h>
 #include <poll.h>
 #include <stdio.h>
 
@@ -28,6 +31,7 @@ public:
 
 	void	parseArgs(int ac, char **av);
 	void	run();
+	void	socketSetup(int &listenfd, struct sockaddr_in &servAddr);
 
 	bool	errToggle;	//If an error occurs in parsing, this becomes true and program doesn't run
 };
