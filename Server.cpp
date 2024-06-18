@@ -93,77 +93,90 @@ ssize_t Server::recvData(int sockfd, char* buffer, size_t bufferSize) {
 
 void	Server::run()
 {
-	int					listenfd;	//welcoming socket that all clients will initially connect to before getting their own socket
-	struct sockaddr_in	servAddr;	//Address the server will listen on
+	int					listenfd;	//Server accepts connections on this socket
+	struct sockaddr_in	servAddr;
 
 	try
 	{
 		socketSetup(listenfd, servAddr);
-
-		std::vector<pollfd>	fds;
-		struct pollfd s_pollfd;
-
-		s_pollfd.fd = listenfd;
-		s_pollfd.events = POLLIN;
-		s_pollfd.revents = 0;
-
-		fds.push_back(s_pollfd);
-		char buff[MAX_CLIENTS][1024];//buffer to test i/o
-		for (size_t i = 0; i < MAX_CLIENTS; i++)
-		{
-			for (size_t k = 0; k < 1024; k++)
-				buff[i][k] = '\0';
-		}
-		std::cout << "Server is running." << std::endl;
-		while (true)
-		{
-			int pollCount = poll(&fds[0], fds.size(), -1);
-			if (pollCount < 0)
-				throw ("Error in poll()");
-			for (size_t i = 0; i < fds.size(); i++)
-			{
-				if (fds[i].revents & POLLIN)
-				{
-					if (fds[i].fd == listenfd)
-					{
-						//We have an incoming connection
-						std::cout << "INCOMING" << std::endl;
-						int clientfd = accept(listenfd, NULL, NULL);
-						if (clientfd < 0)
-							throw ("Error accepting connection.");
-
-						char buffer[1024];
-						ssize_t bytesRead = recvData(clientfd, buffer, 1024);
-						if (bytesRead > 0) {
-							std::cout << "Message reçu: " << buffer << std::endl;
-						}
-
-
-						struct pollfd temp;
-						temp.fd = clientfd;
-						temp.events = POLLIN;
-						temp.revents = 0;
-						fds.push_back(temp);
-					}
-					else
-					{
-						//Existing client
-						if (read(fds[i].fd, &buff[i], 1023) < 0)
-						{
-							std::cout << "Error reading from client" << std::endl;
-							close(fds[i].fd);
-							fds.erase(fds.begin() + i);
-						}
-						else
-							std::cout << buff[i];
-					}
-				}
-			}
-		}
 	}
 	catch (const char *e)
 	{
-		// std::cerr << e << std::endl;
-		perror(e);	//Not allowed, remove later
+		std::cout << e << std::endl;
+	}
+
+	struct pollfd	*pfdsArr = new struct pollfd[MAX_CLIENTS];
+	struct pollfd	pfd;
+	pfd.fd = listenfd;
+	pfd.events = POLLIN | POLLOUT;
+	pfdsArr[0] = pfd;
+
+	for (size_t i = 1; i < MAX_CLIENTS; i++)
+		pfdsArr[i].fd = 0;
+
+	char	buff[512];
+
+	std::cout << "Server is running." << std::endl;
+	while (1)
+	{
+		size_t pfdsArrLen = 0;
+		for (size_t i = 0; i < MAX_CLIENTS; i++)
+		{
+			if (pfdsArr[i].fd == 0)
+				break ;
+			pfdsArrLen++;
+		}
+		int pollreturn = poll(pfdsArr, pfdsArrLen, -1);
+		if (pollreturn < 0)
+			throw ("Poll returned negative value");
+
+		for (size_t i = 0; i < pfdsArrLen; i++)
+		{
+			if (pfdsArr[i].revents & POLLIN) // handlePollIn();
+			{
+				if (pfdsArr[i].fd == listenfd)
+				{
+					//Set up incoming connection
+					int clientfd = accept(listenfd, NULL, NULL);
+					if (clientfd < 0)
+						throw ("Error accepting connection.");
+					struct pollfd temp;
+					temp.fd = clientfd;
+					temp.events = POLLIN; // | POLLOUT
+					if (pfdsArrLen < MAX_CLIENTS)
+						pfdsArr[i] = temp;
+					else
+					{
+						std::cout << "Too many clients." << std::endl;
+						for (int k = 0; k < MAX_CLIENTS; k++)
+							close(pfdsArr[k].fd);
+						return ;
+					}
+				}
+				else
+				{
+					int recvRes = recv(pfdsArr[i].fd, &buff, 512, 0);
+					if (recvRes <= 0)
+					{
+						close(pfdsArr[i].fd);
+						// reallocArr(pfdsArr, i);
+						if (recvRes == 0)
+							std::cout << "Client disconnected" << std::endl;
+						else if (recvRes < 0)
+							throw ("Error receiving from fd");
+					}
+					else
+					{
+						std::cout << "Server received message: " << buff;
+						std::cout << "Forwarding message to client..." << std::endl;
+					}
+				}
+			}
+			if (pfdsArr[i].revents & POLLOUT)// handlePollOut();
+			{
+				send(pfdsArr[i].fd, "hi\n", 3, 0);
+				continue;
+			}
+		}
 	}
 }
