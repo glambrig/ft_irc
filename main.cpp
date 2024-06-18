@@ -43,6 +43,14 @@ int	main(int ac, char **av)
 
 	if (server.errToggle == true)
 		return (1);
-	server.run();
+	try
+	{
+		server.run();
+	}
+	catch (const char *e)
+	{
+		// std::cout << e << std::endl;
+		perror(e);
+	}
 	return (0);
 }
