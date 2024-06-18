@@ -75,13 +75,21 @@ void	Server::socketSetup(int &listenfd, struct sockaddr_in &servAddr)
 		throw ("Server::socketSetup::Error listening for connections.");
 }
 
-// void	handlePollIn(int listenfd, struct pollfd **pfdsArr)
 
-// typedef struct usr
-// {
-// 	struct pollfd	pollfd;
-// 	int				id;
-// }	usr;
+ssize_t Server::recvData(int sockfd, char* buffer, size_t bufferSize) {
+	ssize_t bytesRead = recv(sockfd, buffer, bufferSize, 0);
+	if (bytesRead > 0) {
+		std::cout << "Reçu " << bytesRead << " bytes" << std::endl;
+		buffer[bytesRead] = '\0'; // terminé par un caract nul
+	} else if (bytesRead == 0) {
+		std::cout << "La connexion a été fermée par le client" << std::endl;
+	} else {
+		std::cerr << "Erreur lors de la réception des données" << std::endl;
+	}
+	return bytesRead;
+}
+
+
 
 void	Server::run()
 {

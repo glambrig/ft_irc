@@ -34,6 +34,7 @@ public:
 	void	parseArgs(int ac, char **av);
 	void	run();
 	void	socketSetup(int &listenfd, struct sockaddr_in &servAddr);
+	ssize_t recvData(int sockfd, char* buffer, size_t bufferSize);
 
 	bool	errToggle;	//If an error occurs in parsing, this becomes true and program doesn't run
 };
