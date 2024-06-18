@@ -75,6 +75,22 @@ void	Server::socketSetup(int &listenfd, struct sockaddr_in &servAddr)
 		throw ("Server::run::Error listening for connections.");
 }
 
+
+ssize_t Server::recvData(int sockfd, char* buffer, size_t bufferSize) {
+	ssize_t bytesRead = recv(sockfd, buffer, bufferSize, 0);
+	if (bytesRead > 0) {
+		std::cout << "Reçu " << bytesRead << " bytes" << std::endl;
+		buffer[bytesRead] = '\0'; // terminé par un caract nul
+	} else if (bytesRead == 0) {
+		std::cout << "La connexion a été fermée par le client" << std::endl;
+	} else {
+		std::cerr << "Erreur lors de la réception des données" << std::endl;
+	}
+	return bytesRead;
+}
+
+
+
 void	Server::run()
 {
 	int					listenfd;	//welcoming socket that all clients will initially connect to before getting their own socket
@@ -115,6 +131,14 @@ void	Server::run()
 						int clientfd = accept(listenfd, NULL, NULL);
 						if (clientfd < 0)
 							throw ("Error accepting connection.");
+
+						char buffer[1024];
+						ssize_t bytesRead = recvData(clientfd, buffer, 1024);
+						if (bytesRead > 0) {
+							std::cout << "Message reçu: " << buffer << std::endl;
+						}
+
+
 						struct pollfd temp;
 						temp.fd = clientfd;
 						temp.events = POLLIN;
