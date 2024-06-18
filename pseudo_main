@@ -1,0 +1,37 @@
+int main()
+{
+
+	//User
+	Afficher les users connectés
+	Gestion d'un user qui se deconnecte
+
+	// Affichage  infos User
+	user.socketfd;
+	user.username;
+
+	// Envoi messages One to one
+	user1 envoie message user2
+	- recuperation des sockets
+	- stockage des sockest dans ttab/struc
+	- touver le destinataire
+
+	// Envoi messages One to all
+	user1 envoie message all
+
+	//Tests channel
+	- creation de channel
+	- envoi des messages
+	- envoi messages complets/fragmentés
+
+	// parametrages channel
+	enlever limite de users dans un channel
+	donner droits automatiquement a un user createur de channel
+	//commandes operateur
+	inviter qqn
+	changer/voir topic
+	enlever les restrictions
+	changer le mode du Channel-4 flags-
+
+
+
+}
