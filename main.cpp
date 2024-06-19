@@ -56,14 +56,26 @@ int main()
 {
 	UserManager userManager;
 
-	// Correct instantiation of User objects according to the available constructors
-	User user1("User1"), user2("User2"), user3("User3");
+	struct pollfd pfdsArr[10];
+	int arrSize = 10;
 
-	// Assuming UserManager::addUser has been updated to take a User object and an int for the file descriptor
-	userManager.addUser(user1, 2); // Adjust the second argument as necessary
-	userManager.addUser(user2, 3); // Adjust the second argument as necessary
+	// initialisation of pfdsArr
+	for (int i = 0; i < arrSize; i++)
+	{
+		pfdsArr[i].fd = i;
+	}
 
-	// Your further logic here
+	User user1("User1");
+	std::string message = "Hello User1";
+
+	std::cout << "Preparation envoi message " << user1.getNickname() << std::endl;
+	userManager.sendToOne(user1, message, pfdsArr, arrSize);
+	std::cout << "Message envoye" << std::endl;
+
+	// userManager.addUser(user1, 2);
+	// userManager.addUser(user2, 3);
+
+	// std::map<std::string, int> socketMap = userManager.getSocketMap();
 
 	return 0;
 }
