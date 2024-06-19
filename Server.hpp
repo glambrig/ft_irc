@@ -14,6 +14,7 @@ class User;
 #include <netdb.h>
 #include <poll.h>
 #include <stdio.h>
+#include <map>
 
 class Server
 {

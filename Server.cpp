@@ -55,7 +55,7 @@ void	Server::parseArgs(int ac, char **av)
 	this->sPassword = av[2];
 }
 
-#define MAX_CLIENTS 5
+#define MAX_CLIENTS 10
 
 void	Server::socketSetup(int &listenfd, struct sockaddr_in &servAddr)
 {
@@ -144,7 +144,11 @@ void	Server::run()
 					temp.fd = clientfd;
 					temp.events = POLLIN; // | POLLOUT
 					if (pfdsArrLen < MAX_CLIENTS)
-						pfdsArr[i] = temp;
+					{
+						std::cout << pfdsArrLen << std::endl;
+						pfdsArr[pfdsArrLen] = temp; // ajouter le clientfd au tableau de pollfd
+						pfdsArrLen++; // incrementer la taille du tableau
+					}
 					else
 					{
 						std::cout << "Too many clients." << std::endl;

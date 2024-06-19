@@ -1,5 +1,8 @@
 #include "User.hpp"
 #include "Channel.hpp"
+#include "Server.hpp"
+#include "UserManager.hpp"
+#include <iostream>
 
 // int main()
 // {
@@ -35,14 +38,40 @@
 // 	return (0);
 // }
 
-#include "Server.hpp"
+// -------------------------------------------------------------------//
 
-int	main(int ac, char **av)
+// int	main(int ac, char **av)
+// {
+// 	Server	server(ac, av);
+
+// 	if (server.errToggle == true)
+// 		return (1);
+// 	server.run();
+// 	return (0);
+// }
+
+// -------------------------------------------------------------------//
+
+int main()
 {
-	Server	server(ac, av);
+	User user1, user2, user3;
+	user1.setUsername("User1");
+	user2.setUsername("User2");
+	user3.setUsername("User3");
 
-	if (server.errToggle == true)
-		return (1);
-	server.run();
-	return (0);
+	UserManager userManager;
+	struct pollfd pfds[10]; // Exemple avec un tableau de 10 pollfd pour simplifier
+	int arrSize = 10; // La taille de votre tableau pfds
+
+	// Simuler des utilisateurs et des descripteurs de fichier
+	userManager.addUser("User1"); // Supposons que 2 est le descripteur de fichier pour UserA
+	userManager.addUser("User2"); // Supposons que 3 est le descripteur de fichier pour UserB
+
+	// Créer un utilisateur pour le test
+	User userB("UserB");
+
+	// Appeler sendToOne pour envoyer un message de UserA à UserB
+	userManager.sendToOne(userB, "Hello, UserB!", pfds, arrSize);
+
+	return 0;
 }
