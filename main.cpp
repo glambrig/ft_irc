@@ -66,10 +66,14 @@ int main()
 	}
 
 	User user1("User1");
+	User user2("User2");
+	User user3("User3");
+
 	std::string message = "Hello User1";
 
-	std::cout << "Preparation envoi message " << user1.getNickname() << std::endl;
-	userManager.sendToOne(user1, message, pfdsArr, arrSize);
+	std::cout << "Preparation envoi message from" << user3.getNickname() << std::endl;
+
+	userManager.sendToOne(user3, message, pfdsArr, arrSize);
 	std::cout << "Message envoye" << std::endl;
 
 	// userManager.addUser(user1, 2);

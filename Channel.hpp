@@ -12,6 +12,7 @@ private:
 	std::string	_topic;
 	std::vector<std::string> _users;
 	std::vector<std::string> _operators;
+	std::vector<std::string> _channels;
 
 public:
 	Channel();
@@ -27,6 +28,7 @@ public:
 	std::string	removeUser(std::string name);
 	std::vector<std::string>	getUsers() const;
 	std::vector<std::string>	getOperators() const;
+	std::vector<std::string>	getChannels() const;
 	std::string	getName() const;
 	std::string	getTopic() const;
 	std::string	getKey() const;

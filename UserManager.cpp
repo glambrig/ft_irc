@@ -45,14 +45,35 @@ void UserManager::sendToOne(User user, std::string message, struct pollfd *pfdsA
 		std::cout << "Invalid arguments" << std::endl;
 		return;
 	}
-	if (socketMap.find(user.getNickname()) != socketMap.end())
-	{
-		int pfdsIndex = 0;
 
-		if (pfdsIndex < arrSize)
+	const size_t maxMessageSize = 512;
+
+	if (message.length() > maxMessageSize)
+	{
+		std::cout << "Message too long, cannot send to " << user.getNickname() << std::endl;
+		return;
+	}
+
+	std::map<std::string, int>::const_iterator it = socketMap.find(user.getNickname());
+	if (it != socketMap.end())
+	{
+		int sockfd = it->second; // Récupère le socket associé à l'utilisateur
+		for (int i = 0; i < arrSize; i++)
 		{
-			send(pfdsArr[pfdsIndex].fd, message.c_str(), message.length(), 0);
+			if (pfdsArr[i].fd == sockfd)
+			{
+				ssize_t bytes_sent = send(sockfd, message.c_str(), message.length(), 0);
+				if (bytes_sent == -1)
+				{
+					std::cout << "Fail to send message to " << user.getNickname() << std::endl;
+				}
+				else
+				{
+					std::cout << "Message onetoone sent to " << user.getNickname() << std::endl;
+				}
+				return;
+			}
 		}
 	}
-	std::cout << "Message onetoone sent" << std::endl;
+	std::cout << "User not found or invalid socket" << std::endl;
 }

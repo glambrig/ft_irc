@@ -23,6 +23,8 @@ class	User
 		User& operator=(const User& rhs);
 		~User();
 
+		void createChannel(std::string name);
+
 		std::string	getUsername() const;
 		std::string	getNickname() const;
 		std::string	getPassword() const;

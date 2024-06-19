@@ -1,7 +1,7 @@
 #include "Channel.hpp"
 #include <algorithm>
 
-Channel::Channel()
+Channel::Channel(std::string &nickname) : _name(nickname)
 {
 }
 
@@ -75,6 +75,12 @@ std::vector<std::string>	Channel::getOperators() const
 {
 	return (_operators);
 }
+
+std::vector<std::string>	Channel::getChannels() const
+{
+	return (_channels);
+}
+
 
 std::string	Channel::getName() const
 {
