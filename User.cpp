@@ -1,7 +1,7 @@
 // #include "ft_irc.hpp"
 #include "User.hpp"
 
-User::User()
+User::User(std::string nickname) : nickname(nickname), status(0), currentChannel(-1)
 {
 }
 

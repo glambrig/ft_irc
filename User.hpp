@@ -18,7 +18,7 @@ class	User
 		int			currentChannel;
 
 	public:
-		User();
+		User(std::string nickname);
 		User(const User& copy);
 		User& operator=(const User& rhs);
 		~User();

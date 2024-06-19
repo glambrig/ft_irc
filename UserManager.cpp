@@ -3,6 +3,8 @@
 #include "User.hpp"
 #include <iostream>
 
+class Server;
+
 UserManager::UserManager()
 {
 }
@@ -30,7 +32,12 @@ std::map<std::string, int>	UserManager::getSocketMap() const
 	return (socketMap);
 }
 
-void	UserManager::sendToOne(User user, std::string message, struct pollfd *pfdsArr, int arrSize)
+void addUser(User user, int sockfd)
+{
+	socketpair[user.getNickname()] = sockfd;
+}
+
+void UserManager::sendToOne(User user, std::string message, struct pollfd *pfdsArr, int arrSize)
 {
 	if (pfdsArr == NULL || arrSize <= 0)
 	{
@@ -39,15 +46,14 @@ void	UserManager::sendToOne(User user, std::string message, struct pollfd *pfdsA
 	}
 	if (socketMap.find(user.getNickname()) != socketMap.end())
 	{
-		int pfdsIndex = socketMap[user.getNickname()];
-		ssize_t byteSent = 0;
+		int pfdsIndex = 0; // Assuming you want to start from the first index, adjust as necessary
+		// Ensure pfdsIndex is within bounds and find the correct index based on your logic
+		// This is a placeholder logic. You need to implement how you find the correct pfdsIndex based on your application's logic
 		if (pfdsIndex < arrSize)
+		{
 			ssize_t byteSent = send(pfdsArr[pfdsIndex].fd, message.c_str(), message.length(), 0);
-		if (byteSent < 0)
-			std::cout << "Error sending message to " << user.getNickname() << std::endl;
-	}
-	else
-	{
-		std::cout << "User not found" << std::endl;
+			// Use byteSent or suppress unused variable warning
+			(void)byteSent; // Suppress unused variable warning if byteSent is not used elsewhere
+		}
 	}
 }

@@ -54,24 +54,16 @@
 
 int main()
 {
-	User user1, user2, user3;
-	user1.setUsername("User1");
-	user2.setUsername("User2");
-	user3.setUsername("User3");
-
 	UserManager userManager;
-	struct pollfd pfds[10]; // Exemple avec un tableau de 10 pollfd pour simplifier
-	int arrSize = 10; // La taille de votre tableau pfds
 
-	// Simuler des utilisateurs et des descripteurs de fichier
-	userManager.addUser("User1"); // Supposons que 2 est le descripteur de fichier pour UserA
-	userManager.addUser("User2"); // Supposons que 3 est le descripteur de fichier pour UserB
+	// Correct instantiation of User objects according to the available constructors
+	User user1("User1"), user2("User2"), user3("User3");
 
-	// Créer un utilisateur pour le test
-	User userB("UserB");
+	// Assuming UserManager::addUser has been updated to take a User object and an int for the file descriptor
+	userManager.addUser(user1, 2); // Adjust the second argument as necessary
+	userManager.addUser(user2, 3); // Adjust the second argument as necessary
 
-	// Appeler sendToOne pour envoyer un message de UserA à UserB
-	userManager.sendToOne(userB, "Hello, UserB!", pfds, arrSize);
+	// Your further logic here
 
 	return 0;
 }

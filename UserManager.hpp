@@ -14,6 +14,6 @@ class UserManager
 		std::map<std::string, int>	getSocketMap() const;
 		void sendToOne(User user, std::string message, struct pollfd *pfdsArr, int arrSize);
 
-		void				addUser(User user);
+		void				addUser(User user, int socket);
 		void				removeUser(User user);
 };
