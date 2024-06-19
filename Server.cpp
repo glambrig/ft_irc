@@ -63,16 +63,16 @@ void	Server::socketSetup(int &listenfd, struct sockaddr_in &servAddr)
 	int one = 1;
 
 	if (setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int)) < 0)
-		throw ("sock option error");
+		throw ("Server::socketSetup::Sock option error");
 	if (listenfd < 0)
-		throw ("Server::run::Error creating socket.");
+		throw ("Server::socketSetup::Error creating socket.");
 	servAddr.sin_family = AF_INET;	//Expecting an internet address (ip)
 	servAddr.sin_port = htons(_port);	//Incoming connections on port _port (specified by user)
 	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);	//Accept connections from any IP address
 	if (bind(listenfd, (struct sockaddr *)&servAddr, sizeof(servAddr)) < 0)
-		throw ("Server::run::Error binding address to socket.");
+		throw ("Server::socketSetup::Error binding address to socket.");
 	if (listen(listenfd, MAX_CLIENTS) < 0)
-		throw ("Server::run::Error listening for connections.");
+		throw ("Server::socketSetup::Error listening for connections.");
 }
 
 
@@ -103,8 +103,10 @@ void	Server::run()
 	catch (const char *e)
 	{
 		std::cout << e << std::endl;
+		return ;
 	}
 
+	// usr				*usrs = new usr[MAX_CLIENTS];
 	struct pollfd	*pfdsArr = new struct pollfd[MAX_CLIENTS];
 	struct pollfd	pfd;
 	pfd.fd = listenfd;
@@ -137,6 +139,7 @@ void	Server::run()
 				if (pfdsArr[i].fd == listenfd)
 				{
 					//Set up incoming connection
+					std::cout << "Incoming connection" << std::endl;
 					int clientfd = accept(listenfd, NULL, NULL);
 					if (clientfd < 0)
 						throw ("Error accepting connection.");
@@ -178,9 +181,96 @@ void	Server::run()
 			}
 			if (pfdsArr[i].revents & POLLOUT)// handlePollOut();
 			{
+				std::cout << "Something on POLLOUT." << std::endl;
 				send(pfdsArr[i].fd, "hi\n", 3, 0);
 				continue;
 			}
+			for (size_t k = 0; k < 512; k++)
+				buff[k] = '\0';
 		}
 	}
 }
+
+// typedef struct usrs
+// {
+// 	struct pollfd 	pfd;
+// 	int				id;
+// }	usrs;
+
+	// try
+	// {
+	// 	socketSetup(listenfd, servAddr);
+
+	// 	std::vector<usrs>	fds;
+	// 	usrs s_pollfd;
+
+	// 	s_pollfd.id = -1;
+	// 	s_pollfd.pfd.fd = listenfd;
+	// 	s_pollfd.pfd.events = POLLIN | POLLOUT;
+	// 	s_pollfd.pfd.revents = 0;
+
+	// 	fds.push_back(s_pollfd);
+	// 	char buff[512];
+	// 	std::cout << "Server is running." << std::endl;
+
+	// 	while (true)
+	// 	{
+	// 		std::cout << "Beginning of infinite loop" << std::endl;
+	// 		int pollCount = poll(&fds, fds.size(), -1);
+	// 		if (pollCount < 0)
+	// 			throw ("Error in poll()");
+	// 		for (size_t i = 0; i < fds.size(); i++)
+	// 		{
+	// 			if (fds[i].pfd.revents & POLLIN)
+	// 			{
+	// 				if (fds[i].pfd.fd == listenfd)
+	// 				{
+	// 					//Set up incoming connection
+	// 					std::cout << "Setting up incoming connection" << std::endl;
+	// 					int clientfd = accept(listenfd, NULL, NULL);
+	// 					if (clientfd < 0)
+	// 						throw ("Error accepting connection.");
+	// 					usrs temp;
+	// 					temp.pfd.fd = clientfd;
+	// 					temp.pfd.events = POLLIN;
+	// 					temp.id = 0;
+	// 					fds.push_back(temp);
+	// 					std::cout << "End." << std::endl;
+	// 				}
+	// 				else
+	// 				{
+	// 					//Existing client
+	// 					std::cout << "Existing client. Handling data." << std::endl;
+	// 					if (recv(fds[i].pfd.fd, &buff, 1023, 0) <= 0)
+	// 					{
+	// 						std::cout << "Client disconnected." << std::endl;
+	// 						close(fds[i].pfd.fd);
+	// 						fds.erase(fds.begin() + i);
+	// 					}
+	// 					else
+	// 					{
+	// 						std::cout << buff;
+
+	// 						//find out who the message is for
+	// 						//syntax: id message
+	// 						if (fds.size() >= 3)
+	// 						{
+	// 							send(buff[0] - '0', &buff, sizeof(char) * sizeof(buff), 0);
+	// 							std::cout << "message sent!" << std::endl;
+	// 						}
+	// 						else
+	// 							std::cout << "not enough clients" << std::endl;
+	// 					}
+	// 					//Clear buffer
+	// 					for (size_t k = 0; k < 512; k++)
+	// 							buff[k] = '\0';
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// catch (const char *e)
+	// {
+	// 	// std::cerr << e << std::endl;
+	// 	perror(e);	//Not allowed, remove later
+	// }

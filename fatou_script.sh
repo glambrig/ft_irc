@@ -1,3 +1,5 @@
+#! /bin/sh
+
 git switch fatdiall
 git pull
 git switch glambrig

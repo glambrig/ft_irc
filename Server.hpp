@@ -6,6 +6,7 @@ class User;
 #include <vector>
 #include <stdlib.h>
 #include <ctype.h>
+#include <cstring>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
