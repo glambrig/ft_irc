@@ -67,7 +67,7 @@ void	Server::socketSetup(int &listenfd, struct sockaddr_in &servAddr)
 	if (listenfd < 0)
 		throw ("Server::run::Error creating socket.");
 	servAddr.sin_family = AF_INET;	//Expecting an internet address (ip)
-	servAddr.sin_port = htonl(_port);	//Incoming connections on port _port (specified by user)
+	servAddr.sin_port = htons(_port);	//Incoming connections on port _port (specified by user)
 	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);	//Accept connections from any IP address
 	if (bind(listenfd, (struct sockaddr *)&servAddr, sizeof(servAddr)) < 0)
 		throw ("Server::run::Error binding address to socket.");
@@ -76,39 +76,14 @@ void	Server::socketSetup(int &listenfd, struct sockaddr_in &servAddr)
 }
 
 
-// ssize_t Server::recvData(int sockfd, char* buffer, size_t bufferSize)
-// {
-// 	ssize_t bytesRead = recv(sockfd, buffer, bufferSize, 0);
-// 	if (bytesRead > 0)
-// 	{
-// 		std::cout << "Reçu " << bytesRead << " bytes" << std::endl;
-// 		buffer[bytesRead] = '\0'; // terminé par un caract nul
-// 	} else if (bytesRead == 0)
-// 	{
-// 		std::cout << "La connexion a été fermée par le client" << std::endl;
-// 	}
-// 	else
-// 	{
-// 		std::cerr << "Erreur lors de la réception des données" << std::endl;
-// 	}
-// 	return bytesRead;
-// }
-
-
-ssize_t Server::recvData(int sockfd, char* buffer, size_t bufferSize)
-{
-	ssize_t bytesRead = recv(sockfd, buffer, bufferSize - 1, 0); // la place pour le caractère nul
-	if (bytesRead > 0)
-	{
-		buffer[bytesRead] = '\0';
-		std::cout << "Reçu " << bytesRead << " bytes: " << buffer << std::endl; // Affiche les données reçues
-	}
-	else if (bytesRead == 0)
-	{
+ssize_t Server::recvData(int sockfd, char* buffer, size_t bufferSize) {
+	ssize_t bytesRead = recv(sockfd, buffer, bufferSize, 0);
+	if (bytesRead > 0) {
+		std::cout << "Reçu " << bytesRead << " bytes" << std::endl;
+		buffer[bytesRead] = '\0'; // terminé par un caract nul
+	} else if (bytesRead == 0) {
 		std::cout << "La connexion a été fermée par le client" << std::endl;
-	}
-	else
-	{
+	} else {
 		std::cerr << "Erreur lors de la réception des données" << std::endl;
 	}
 	return bytesRead;
