@@ -55,14 +55,29 @@ std::string	Channel::addUser(std::string name)
 	return (name);
 }
 
-std::string	Channel::removeUser(std::string name)
+// std::string	Channel::removeUser(std::string name)
+// {
+// 	std::vector<std::string>::iterator it = std::find(_users.begin(), _users.end(), name);
+// 	if (it == _users.end())
+// 		return ("User not found");
+// 	_users.erase(it);
+// 	return (name);
+// }
+
+std::string Channel::removeUser(std::string name)
 {
-	std::vector<std::string>::iterator it = std::find(_users.begin(), _users.end(), name);
-	if (it == _users.end())
-		return ("User not found");
-	_users.erase(it);
-	return (name);
+	std::vector<std::string>::iterator it;
+	for (it = _users.begin(); it != _users.end(); ++it)
+	{
+		if (*it == name)
+		{
+			_users.erase(it);
+			return name;
+		}
+	}
+	return "User not found";
 }
+
 
 //-------------- getters -----------------//
 

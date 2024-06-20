@@ -1,4 +1,7 @@
+#pragma once
+
 #include "User.hpp"
+#include "Channel"
 
 class UserManager
 {
@@ -16,4 +19,5 @@ class UserManager
 
 		void				addUser(User user, int socket);
 		void				removeUser(User user);
+		Channel* findChanByName(std::string), name;
 };

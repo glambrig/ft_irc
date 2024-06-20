@@ -15,12 +15,13 @@ private:
 	std::vector<std::string> _channels;
 
 public:
-	Channel();
+Channel();
+	Channel(std::string &nickname);
 	Channel(const Channel& copy);
 	Channel& operator=(const Channel& rhs);
 	~Channel();
 
-	void	setName(std::string name);
+		void	setName(std::string name);
 	void	setKey(std::string name);
 	void	setTopic(std::string name);
 
