@@ -38,4 +38,8 @@ class	User
 		void		setSocket(int socket);
 		void		setStatus(int status);
 		void		setCurrentChannel(int currentChannel);
+
+		bool		operator==(const User& rhs) const;
 };
+
+// bool operator==(const User& lhs, const User& rhs);

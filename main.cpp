@@ -4,6 +4,7 @@
 #include "UserManager.hpp"
 #include <iostream>
 
+// ------------------------ basic tests -----------------------------//
 // int main()
 // {
 // 	User user1, user2, user3, user4, user5, user6, user7;
@@ -21,7 +22,7 @@
 // 	channel3.setName("ThirdChannel");
 
 // 	channel1.setKey("2345");
-// 	channel1.setTopic("This channel talks about the weather");
+// 	channel1.setTopicOn("This channel talks about the weather");
 // 	channel1.addUser("SecondUser");
 // 	channel1.addUser("ThirdUser");
 
@@ -52,34 +53,94 @@
 
 // -------------------------------------------------------------------//
 
+// int main()
+// {
+// 	UserManager userManager;
+
+// 	struct pollfd pfdsArr[10];
+// 	int arrSize = 10;
+
+// 	// initialisation of pfdsArr
+// 	for (int i = 0; i < arrSize; i++)
+// 	{
+// 		pfdsArr[i].fd = i;
+// 	}
+
+// 	User user1("User1");
+// 	User user2("User2");
+// 	User user3("User3");
+
+// 	std::string message = "Hello User1";
+
+// 	std::cout << "Preparation envoi message from" << user3.getNickname() << std::endl;
+
+// 	userManager.sendToOne(user3, message, pfdsArr, arrSize);
+// 	std::cout << "Message envoye" << std::endl;
+
+// 	// userManager.addUser(user1, 2);
+// 	// userManager.addUser(user2, 3);
+
+// 	// std::map<std::string, int> socketMap = userManager.getSocketMap();
+
+// 	return 0;
+// }
+
+// ------------------------ test channels -----------------------------//
+
+
 int main()
 {
-	UserManager userManager;
+	// Création d'un Channel
+	std::string channelName("TechTalk");
+	Channel techTalkChannel(channelName);
 
-	struct pollfd pfdsArr[10];
-	int arrSize = 10;
+	// Création du ChannelManager
+	ChannelManager channelManager;
 
-	// initialisation of pfdsArr
-	for (int i = 0; i < arrSize; i++)
+	// Création d'utilisateurs
+	User alice("Alice");
+	User bob("Bob");
+
+	// Ajout d'utilisateurs au Channel via ChannelManager
+	techTalkChannel.addUser(alice.getNickname());
+	techTalkChannel.addUser(bob.getNickname());
+
+	// Affichage des utilisateurs du Channel
+	std::cout << "Utilisateurs dans le channel " << techTalkChannel.getName() << ": ";
+	std::vector<std::string> users = techTalkChannel.getUsers();
+	for (std::vector<std::string>::iterator it = users.begin(); it != users.end(); ++it)
 	{
-		pfdsArr[i].fd = i;
+		std::cout << *it << " ";
+	}
+	std::cout << std::endl;
+
+	// Ajout d'opérateurs et d'invitations
+	channelManager.addOperator(channelName, alice);
+	channelManager.inviteUser(channelName, bob);
+
+	// Vérification des rôles et des invitations
+	if (channelManager.isUserOperator(channelName, alice))
+	{
+		std::cout << alice.getNickname() << " est un opérateur du channel " << channelName << std::endl;
 	}
 
-	User user1("User1");
-	User user2("User2");
-	User user3("User3");
+	if (channelManager.isUserInvited(channelName, bob))
+	{
+		std::cout << bob.getNickname() << " est invité au channel " << channelName << std::endl;
+	}
 
-	std::string message = "Hello User1";
+	// Gestion des sujets
+	std::string topic("Nouvelles Technologies");
+	channelManager.setTopicOn(channelName, topic);
+	std::cout << "Le sujet du channel " << channelName << " est : " << channelManager.getTopic(channelName) << std::endl;
 
-	std::cout << "Preparation envoi message from" << user3.getNickname() << std::endl;
-
-	userManager.sendToOne(user3, message, pfdsArr, arrSize);
-	std::cout << "Message envoye" << std::endl;
-
-	// userManager.addUser(user1, 2);
-	// userManager.addUser(user2, 3);
-
-	// std::map<std::string, int> socketMap = userManager.getSocketMap();
+	// Gestion des limites d'utilisateurs
+	int limit = 5;
+	channelManager.setLimit(channelName, limit);
+	if (!channelManager.isLimitReached(channelName))
+	{
+		std::cout << "La limite d'utilisateurs pour le channel " << channelName << " n'est pas atteinte." << std::endl;
+	}
 
 	return 0;
 }

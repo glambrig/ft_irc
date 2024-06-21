@@ -78,14 +78,14 @@ void UserManager::sendToOne(User user, std::string message, struct pollfd *pfdsA
 	std::cout << "User not found or invalid socket" << std::endl;
 }
 
-Channel* findChanByName(std::string name)
+Channel* UserManager::findChanByName(std::string name)
 {
 	for (std::vector<Channel>::iterator it = channels.begin(); it != channels.end(); ++it)
 	{
-	if (it->getName() == name)
-	{
-		return &(*it);
+		if (it->getName() == name)
+		{
+			return &(*it);
+		}
 	}
-}
-return NULL;
+	return NULL;
 }

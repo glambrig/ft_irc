@@ -21,9 +21,9 @@ Channel();
 	Channel& operator=(const Channel& rhs);
 	~Channel();
 
-		void	setName(std::string name);
+	void	setName(std::string name);
 	void	setKey(std::string name);
-	void	setTopic(std::string name);
+	void	setTopicOn(std::string name);
 
 	std::string	addUser(std::string name);
 	std::string	removeUser(std::string name);

@@ -12,9 +12,6 @@ Channel::Channel(const Channel& copy)
 
 Channel& Channel::operator=(const Channel& rhs)
 {
-	if (&rhs != this)
-		*this = rhs;
-	return (*this);
 	if (this != &rhs)
 	{
 		this->_name = rhs._name;
@@ -41,7 +38,7 @@ void	Channel::setKey(std::string key)
 	_key = key;
 }
 
-void	Channel::setTopic(std::string topic)
+void	Channel::setTopicOn(std::string topic)
 {
 	_topic = topic;
 }

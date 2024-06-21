@@ -27,7 +27,8 @@ User::~User()
 {
 }
 
-// Getters //
+//------------------------- Getters -------------------------//
+
 std::string	User::getUsername() const
 {
 	return (this->username);
@@ -58,7 +59,8 @@ int			User::getCurrentChannel() const
 	return (this->currentChannel);
 }
 
-// Setters //
+//------------------------------ Setters ----------------------------//
+
 void		User::setUsername(std::string username)
 {
 	this->username = username;
@@ -91,4 +93,16 @@ void		User::setStatus(int status)
 void		User::setCurrentChannel(int currentChannel)
 {
 	this->currentChannel = currentChannel;
+}
+
+bool operator==(const User& lhs, const User& rhs)
+{
+	return (lhs.getNickname() == rhs.getNickname());
+}
+
+// -----------------------------------//
+
+bool User::operator==(const User& rhs) const
+{
+	return (this->nickname == rhs.nickname);
 }
