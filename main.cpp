@@ -41,15 +41,15 @@
 
 // -------------------------------------------------------------------//
 
-// int	main(int ac, char **av)
-// {
-// 	Server	server(ac, av);
+int	main(int ac, char **av)
+{
+	Server	server(ac, av);
 
-// 	if (server.errToggle == true)
-// 		return (1);
-// 	server.run();
-// 	return (0);
-// }
+	if (server.errToggle == true)
+		return (1);
+	server.run();
+	return (0);
+}
 
 // -------------------------------------------------------------------//
 
@@ -88,59 +88,59 @@
 // ------------------------ test channels -----------------------------//
 
 
-int main()
-{
-	// Création d'un Channel
-	std::string channelName("TechTalk");
-	Channel techTalkChannel(channelName);
+// int main()
+// {
+// 	// Création d'un Channel
+// 	std::string channelName("TechTalk");
+// 	Channel techTalkChannel(channelName);
 
-	// Création du ChannelManager
-	ChannelManager channelManager;
+// 	// Création du ChannelManager
+// 	ChannelManager channelManager;
 
-	// Création d'utilisateurs
-	User alice("Alice");
-	User bob("Bob");
+// 	// Création d'utilisateurs
+// 	User alice("Alice");
+// 	User bob("Bob");
 
-	// Ajout d'utilisateurs au Channel via ChannelManager
-	techTalkChannel.addUser(alice.getNickname());
-	techTalkChannel.addUser(bob.getNickname());
+// 	// Ajout d'utilisateurs au Channel via ChannelManager
+// 	techTalkChannel.addUser(alice.getNickname());
+// 	techTalkChannel.addUser(bob.getNickname());
 
-	// Affichage des utilisateurs du Channel
-	std::cout << "Utilisateurs dans le channel " << techTalkChannel.getName() << ": ";
-	std::vector<std::string> users = techTalkChannel.getUsers();
-	for (std::vector<std::string>::iterator it = users.begin(); it != users.end(); ++it)
-	{
-		std::cout << *it << " ";
-	}
-	std::cout << std::endl;
+// 	// Affichage des utilisateurs du Channel
+// 	std::cout << "Utilisateurs dans le channel " << techTalkChannel.getName() << ": ";
+// 	std::vector<std::string> users = techTalkChannel.getUsers();
+// 	for (std::vector<std::string>::iterator it = users.begin(); it != users.end(); ++it)
+// 	{
+// 		std::cout << *it << " ";
+// 	}
+// 	std::cout << std::endl;
 
-	// Ajout d'opérateurs et d'invitations
-	channelManager.addOperator(channelName, alice);
-	channelManager.inviteUser(channelName, bob);
+// 	// Ajout d'opérateurs et d'invitations
+// 	channelManager.addOperator(channelName, alice);
+// 	channelManager.inviteUser(channelName, bob);
 
-	// Vérification des rôles et des invitations
-	if (channelManager.isUserOperator(channelName, alice))
-	{
-		std::cout << alice.getNickname() << " est un opérateur du channel " << channelName << std::endl;
-	}
+// 	// Vérification des rôles et des invitations
+// 	if (channelManager.isUserOperator(channelName, alice))
+// 	{
+// 		std::cout << alice.getNickname() << " est un opérateur du channel " << channelName << std::endl;
+// 	}
 
-	if (channelManager.isUserInvited(channelName, bob))
-	{
-		std::cout << bob.getNickname() << " est invité au channel " << channelName << std::endl;
-	}
+// 	if (channelManager.isUserInvited(channelName, bob))
+// 	{
+// 		std::cout << bob.getNickname() << " est invité au channel " << channelName << std::endl;
+// 	}
 
-	// Gestion des sujets
-	std::string topic("Nouvelles Technologies");
-	channelManager.setTopicOn(channelName, topic);
-	std::cout << "Le sujet du channel " << channelName << " est : " << channelManager.getTopic(channelName) << std::endl;
+// 	// Gestion des sujets
+// 	std::string topic("Nouvelles Technologies");
+// 	channelManager.setTopicOn(channelName, topic);
+// 	std::cout << "Le sujet du channel " << channelName << " est : " << channelManager.getTopic(channelName) << std::endl;
 
-	// Gestion des limites d'utilisateurs
-	int limit = 5;
-	channelManager.setLimit(channelName, limit);
-	if (!channelManager.isLimitReached(channelName))
-	{
-		std::cout << "La limite d'utilisateurs pour le channel " << channelName << " n'est pas atteinte." << std::endl;
-	}
+// 	// Gestion des limites d'utilisateurs
+// 	int limit = 5;
+// 	channelManager.setLimit(channelName, limit);
+// 	if (!channelManager.isLimitReached(channelName))
+// 	{
+// 		std::cout << "La limite d'utilisateurs pour le channel " << channelName << " n'est pas atteinte." << std::endl;
+// 	}
 
-	return 0;
-}
+// 	return 0;
+// }

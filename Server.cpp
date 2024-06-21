@@ -176,6 +176,7 @@ void	Server::run()
 					{
 						std::cout << "Server received message: " << buff;
 						std::cout << "Forwarding message to client..." << std::endl;
+						send(pfdsArr[i].fd, ":irc 332 fatou #example :No topic is set", 47, 0);
 					}
 				}
 			}
