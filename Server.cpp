@@ -1,6 +1,5 @@
 #include "Server.hpp"
 
-#define MAX_CLIENTS 5
 
 Server::Server()
 {
@@ -89,8 +88,8 @@ void Server::whoIsMessageFor(const char *buffer, const int i)
 	//	Send to everyone
 	for (size_t k = 0; k < _users.size(); k++)
 	{
-		if (_users[k].getSocket() != i)
-			send(_users[k].getSocket(), buff.c_str(), strlen(buff.c_str()), 0);
+		if (_users[k].socket != i)
+			send(_users[k].socket, buff.c_str(), strlen(buff.c_str()), 0);
 	}
 }
 
@@ -115,7 +114,7 @@ void	Server::handlePollIn(struct pollfd	**pfdsArr, size_t pfdsArrLen, size_t i, 
 			std::cout << pfdsArrLen << std::endl;
 			(*pfdsArr)[pfdsArrLen] = temp;
 			User	newUsr;
-			newUsr.setSocket(temp.fd);
+			newUsr.socket = temp.fd;
 			_users.push_back(newUsr);
 		}
 		else
@@ -135,7 +134,7 @@ void	Server::handlePollIn(struct pollfd	**pfdsArr, size_t pfdsArrLen, size_t i, 
 			// reallocArr(pfdsArr, i);	//need to write this. frees the space taken up by the disconnected client, and realloc's the array
 			if (recvRes == 0)
 			{
-				_users[i].setisConnected(false);
+				// _users[i].setisConnected(false);
 				std::cout << "Client disconnected" << std::endl;
 			}
 			else if (recvRes < 0)
@@ -145,7 +144,7 @@ void	Server::handlePollIn(struct pollfd	**pfdsArr, size_t pfdsArrLen, size_t i, 
 		{
 			std::cout << "Server received message: " << buff 
 				<< "Forwarding message to client..." << std::endl;
-			whoIsMessageFor(buff, i);
+			whoIsMessageFor(buff, i - 1);
 			std::cout << "sent message!" << std::endl;
 		}
 	}
