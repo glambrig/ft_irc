@@ -1,7 +1,7 @@
 #include "Channel.hpp"
 #include <algorithm>
 
-Channel::Channel()
+Channel::Channel(std::string &nickname) : _name(nickname)
 {
 }
 
@@ -12,9 +12,6 @@ Channel::Channel(const Channel& copy)
 
 Channel& Channel::operator=(const Channel& rhs)
 {
-	if (&rhs != this)
-		*this = rhs;
-	return (*this);
 	if (this != &rhs)
 	{
 		this->_name = rhs._name;
@@ -41,7 +38,7 @@ void	Channel::setKey(std::string key)
 	_key = key;
 }
 
-void	Channel::setTopic(std::string topic)
+void	Channel::setTopicOn(std::string topic)
 {
 	_topic = topic;
 }
@@ -55,14 +52,29 @@ std::string	Channel::addUser(std::string name)
 	return (name);
 }
 
-std::string	Channel::removeUser(std::string name)
+// std::string	Channel::removeUser(std::string name)
+// {
+// 	std::vector<std::string>::iterator it = std::find(_users.begin(), _users.end(), name);
+// 	if (it == _users.end())
+// 		return ("User not found");
+// 	_users.erase(it);
+// 	return (name);
+// }
+
+std::string Channel::removeUser(std::string name)
 {
-	std::vector<std::string>::iterator it = std::find(_users.begin(), _users.end(), name);
-	if (it == _users.end())
-		return ("User not found");
-	_users.erase(it);
-	return (name);
+	std::vector<std::string>::iterator it;
+	for (it = _users.begin(); it != _users.end(); ++it)
+	{
+		if (*it == name)
+		{
+			_users.erase(it);
+			return name;
+		}
+	}
+	return "User not found";
 }
+
 
 //-------------- getters -----------------//
 
@@ -75,6 +87,12 @@ std::vector<std::string>	Channel::getOperators() const
 {
 	return (_operators);
 }
+
+std::vector<std::string>	Channel::getChannels() const
+{
+	return (_channels);
+}
+
 
 std::string	Channel::getName() const
 {

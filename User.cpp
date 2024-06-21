@@ -1,7 +1,7 @@
 // #include "ft_irc.hpp"
 #include "User.hpp"
 
-User::User()
+User::User(std::string nickname) : nickname(nickname), status(0), currentChannel(-1)
 {
 }
 
@@ -27,7 +27,8 @@ User::~User()
 {
 }
 
-// Getters //
+//------------------------- Getters -------------------------//
+
 std::string	User::getUsername() const
 {
 	return (this->_username);
@@ -58,7 +59,8 @@ int			User::getCurrentChannel() const
 	return (this->_currentChannel);
 }
 
-// Setters //
+//------------------------------ Setters ----------------------------//
+
 void		User::setUsername(std::string username)
 {
 	this->_username = username;
@@ -103,20 +105,14 @@ void		User::setCurrentChannel(int currentChannel)
 	this->_currentChannel = currentChannel;
 }
 
-void		User::setup(const std::string &buff)
+bool operator==(const User& lhs, const User& rhs)
 {
-	if (buff.empty() || buff.find('\0') != std::string::npos)
-	{
-		std::cout << "SOMETHING REALLY BAD HAPPENED" << std::endl;
-		return ;
-	}
-	if (buff.compare(0, 4, "NICK") == 0)
-	{
-		//there's a nick parsing func somewhere but i don't remember where
-		this->setNickname(buff);
-	}
-	// if (buff.compare(0, 4, "USER") == 0)
-	// {
+	return (lhs.getNickname() == rhs.getNickname());
+}
 
-	// }
+// -----------------------------------//
+
+bool User::operator==(const User& rhs) const
+{
+	return (this->nickname == rhs.nickname);
 }

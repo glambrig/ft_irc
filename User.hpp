@@ -17,10 +17,12 @@ class	User
 		int			_currentChannel;
 
 	public:
-		User();
+		User(std::string nickname);
 		User(const User& copy);
 		User& operator=(const User& rhs);
 		~User();
+
+		void createChannel(std::string name);
 
 		std::string	getUsername() const;
 		std::string	getNickname() const;
@@ -36,5 +38,7 @@ class	User
 		void		setisConnected(bool isConnected);
 		void		setCurrentChannel(int currentChannel);
 
-		void		setup(const std::string &buff);
+		bool		operator==(const User& rhs) const;
 };
+
+// bool operator==(const User& lhs, const User& rhs);

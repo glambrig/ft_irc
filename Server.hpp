@@ -15,6 +15,7 @@
 #include <netdb.h>
 #include <poll.h>
 #include <stdio.h>
+#include <map>
 
 class Server
 {
@@ -36,6 +37,7 @@ public:
 	void	handlePollIn(struct pollfd	**pfdsArr, size_t pfdsArrLen, size_t i, int listenfd);
 	void	run();
 	void	socketSetup(int &listenfd, struct sockaddr_in &servAddr);
+	ssize_t recvData(int sockfd, char* buffer, size_t bufferSize);
 
 	bool	errToggle;	//If an error occurs in parsing, this becomes true and program doesn't run
 };

@@ -57,6 +57,7 @@ void	Server::parseArgs(int ac, char **av)
 	this->sPassword = av[2];
 }
 
+#define MAX_CLIENTS 10
 
 void	Server::socketSetup(int &listenfd, struct sockaddr_in &servAddr)
 {
