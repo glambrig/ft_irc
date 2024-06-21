@@ -76,8 +76,24 @@ void	Server::socketSetup(int &listenfd, struct sockaddr_in &servAddr)
 		throw ("Server::socketSetup::Error listening for connections.");
 }
 
-// void	handlePollIn(int listenfd, struct pollfd **pfdsArr)
-void	handlePollIn(struct pollfd	**pfdsArr, size_t pfdsArrLen, size_t i, int listenfd)
+void Server::whoIsMessageFor(const char *buffer, const int i)
+{
+	std::string buff = buffer;
+
+	if (buff.compare(0, 4, "USER") == 0 || buff.compare(0, 4, "NICK") == 0)
+	{
+		_users[i].setup(buff);
+		return ;
+	}
+	//	Send to everyone
+	for (size_t k = 0; k < _users.size(); k++)
+	{
+		if (_users[k].getSocket() != i)
+			send(_users[k].getSocket(), buff.c_str(), strlen(buff.c_str()), 0);
+	}
+}
+
+void	Server::handlePollIn(struct pollfd	**pfdsArr, size_t pfdsArrLen, size_t i, int listenfd)
 {
 	char	buff[512];
 
@@ -97,6 +113,9 @@ void	handlePollIn(struct pollfd	**pfdsArr, size_t pfdsArrLen, size_t i, int list
 		{
 			std::cout << pfdsArrLen << std::endl;
 			(*pfdsArr)[pfdsArrLen] = temp;
+			User	newUsr;
+			newUsr.setSocket(temp.fd);
+			_users.push_back(newUsr);
 		}
 		else
 		{
@@ -114,7 +133,10 @@ void	handlePollIn(struct pollfd	**pfdsArr, size_t pfdsArrLen, size_t i, int list
 			close((*pfdsArr)[i].fd);
 			// reallocArr(pfdsArr, i);	//need to write this. frees the space taken up by the disconnected client, and realloc's the array
 			if (recvRes == 0)
+			{
+				_users[i].setisConnected(false);
 				std::cout << "Client disconnected" << std::endl;
+			}
 			else if (recvRes < 0)
 				throw ("Error receiving from fd");
 		}
@@ -122,7 +144,7 @@ void	handlePollIn(struct pollfd	**pfdsArr, size_t pfdsArrLen, size_t i, int list
 		{
 			std::cout << "Server received message: " << buff 
 				<< "Forwarding message to client..." << std::endl;
-			send((*pfdsArr)[pfdsArrLen - i].fd, &buff, strlen(buff), 0);
+			whoIsMessageFor(buff, i);
 			std::cout << "sent message!" << std::endl;
 		}
 	}
