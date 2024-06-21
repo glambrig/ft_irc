@@ -2,7 +2,6 @@
 
 #include "Channel.hpp"
 #include "User.hpp"
-// class User;
 #include <vector>
 #include <stdlib.h>
 #include <ctype.h>
